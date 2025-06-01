@@ -11,6 +11,7 @@ function App() {
         <Route path="/" element={<LandingPage />} />
         <Route path="/classroom" element={<CalendarView />} />
         <Route path="/classroom_embed" element={<CalendarView_Embed />} />
+         <Route path="*" element={<LandingPage />} />
       </Routes>
     </Router>
   );
