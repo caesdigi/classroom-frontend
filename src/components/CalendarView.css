@@ -1,0 +1,105 @@
+/* Agenda View - Date Column */
+.rbc-agenda-date-cell {
+    background: white !important;
+    color: #000 !important;
+    border-color: #ddd !important;
+  }
+  
+  /* Agenda View - Time Column */
+  .rbc-agenda-time-cell {
+    background: inherit;
+    color: inherit;
+    border-color: #ddd !important;
+  }
+  
+  /* Agenda View - Event Column */
+  .rbc-agenda-event-cell {
+    border-color: #ddd !important;
+  }
+  
+  /* Agenda Table Borders */
+  .rbc-agenda-table {
+    border: 1px solid #ddd !important;
+  }
+  
+  .rbc-agenda-table thead > tr > th {
+    border-color: #ddd !important;
+  }
+  
+  .rbc-agenda-table tbody > tr > td {
+    border-color: #ddd !important;
+  }
+
+  /* Force all agenda view borders to grey */
+.rbc-agenda-content table,
+.rbc-agenda-content tr,
+.rbc-agenda-content td,
+.rbc-agenda-content th {
+  border-color: #ddd !important;
+}
+
+/* Remove event border color bleeding */
+.rbc-agenda-event-cell > div {
+  border-left-color: #ddd !important;
+  margin-left: -1px; /* Fix border alignment */
+}
+
+/* Force left border for all time cells */
+.rbc-agenda-time-cell {
+    border-left: 1px solid #ddd !important;
+}
+  
+/* Remove merged cell border interference */
+.rbc-agenda-date-cell {
+    border-right: 1px solid #ddd !important;
+    z-index: 1;
+}
+  
+/* Fix border alignment for subsequent events */
+.rbc-agenda-table tbody > tr + tr .rbc-agenda-time-cell {
+    border-top: 1px solid #ddd !important;
+}
+
+/* Modal backdrop clickable area */
+.ReactModal__Overlay {
+  backdrop-filter: blur(2px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* Modal content scrolling for long remarks */
+.ReactModal__Content {
+  overflow: auto;
+  max-height: 80%;
+}
+
+/* Close button hover effect */
+.modal-close-btn:hover {
+  color: #1a365d;
+}
+
+/* Grid alignment fixes */
+.grid-cols-3 > div {
+  min-height: 1.5rem;
+  align-items: center;
+  display: flex;
+}
+
+/* Modal header spacing */
+.text-xl {
+  margin-bottom: 1rem;
+}
+
+/* Cancelled event styling */
+.cancelled-event {
+  text-decoration: line-through;
+  color: #ef4444 !important;
+  opacity: 0.7;
+}
+
+/* Disabled UID inputs */
+.uid-input-disabled {
+  background-color: #f3f4f6;
+  border-color: #d1d5db;
+}
