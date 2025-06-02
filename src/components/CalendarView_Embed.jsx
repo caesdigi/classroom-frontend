@@ -525,7 +525,7 @@ const CalendarView = () => {
 
   return (
     <div className="w-full">
-      <form onSubmit={handleSubmit} className="grid grid-cols-2 gap-6 mb-8 px-2">
+      <form onSubmit={handleSubmit} className="grid grid-cols-2 gap-6 mb-8 px-1">
         <div className="space-y-4">
           <div className="space-y-1">
             <label className="block text-sm font-medium text-gray-700">Name</label>
@@ -714,7 +714,7 @@ const CalendarView = () => {
             className="w-full rounded-md border-gray-300 shadow-sm focus:ring-blue-500 focus:border-blue-500 resize-y min-h-[2.5rem]"
             value={formData.remarks}
             onChange={(e) => setFormData({ ...formData, remarks: e.target.value })}
-            rows={3}
+            rows={1}
             placeholder="Special requests or notes"
           />
         </div>
@@ -741,23 +741,23 @@ const CalendarView = () => {
         </div>
       )}
 
-      <div className="w-full px-2">
+      <div className="w-full px-1">
         <Calendar
           localizer={localizer}
           events={events}
           startAccessor="start"
           endAccessor="end"
-          style={{ height: 600 }}
+          style={{ height: 400 }}
           eventPropGetter={eventPropGetter}
           date={currentDate}
           view={view}
           onNavigate={setCurrentDate}
           onView={setView}
           onSelectEvent={handleEventClick}
-          min={moment().set({ hour: 9, minute: 30 }).toDate()}
-          max={moment().set({ hour: 17, minute: 30 }).toDate()}
-          step={30}
-          timeslots={2}
+          min={moment().set({ hour: 13, minute: 30 }).toDate()}
+          max={moment().set({ hour: 16, minute: 50 }).toDate()}
+          step={50}
+          timeslots={1}
           formats={{
             timeGutterFormat: 'H:mm',
             eventTimeRangeFormat: ({ start, end }) => 
