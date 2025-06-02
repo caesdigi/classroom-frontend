@@ -75,12 +75,12 @@ const CalendarView = () => {
   const [roomStyles, setRoomStyles] = useState({});
   const [roomsLoading, setRoomsLoading] = useState(true);
 
-  // Resets datepicker and time on room change
+  // Resets datepicker, time and uid on room change
   const handleRoomChange = (roomId) => {
     setFormData(prev => ({
       ...prev,
       room_id: roomId,
-      uid: '',
+      // uid: '',
       date: null,
       start_time: '',
       end_time: ''
