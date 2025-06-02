@@ -525,7 +525,7 @@ const CalendarView = () => {
 
   return (
     <div className="w-full">
-      <form onSubmit={handleSubmit} className="grid grid-cols-2 gap-6 mb-8">
+      <form onSubmit={handleSubmit} className="grid grid-cols-2 gap-6 mb-8 px-2">
         <div className="space-y-4">
           <div className="space-y-1">
             <label className="block text-sm font-medium text-gray-700">Name</label>
@@ -741,7 +741,7 @@ const CalendarView = () => {
         </div>
       )}
 
-      <div className="w-full">
+      <div className="w-full px-2">
         <Calendar
           localizer={localizer}
           events={events}
