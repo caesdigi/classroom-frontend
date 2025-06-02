@@ -747,7 +747,7 @@ const CalendarView = () => {
           events={events}
           startAccessor="start"
           endAccessor="end"
-          style={{ height: 400 }}
+          style={{ height: 500 }}
           eventPropGetter={eventPropGetter}
           date={currentDate}
           view={view}
