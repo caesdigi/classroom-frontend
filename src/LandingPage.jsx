@@ -17,10 +17,13 @@ const LandingPage = () => {
             <p className="mt-2 text-blue-100">Reserve a classroom for your learning activities</p>
           </Link>
           
-          <div className="block bg-gray-300 text-gray-500 text-center py-4 px-6 rounded-lg shadow-md">
+          <Link 
+            to="/equipment" 
+            className="block bg-blue-600 hover:bg-blue-700 text-white text-center py-4 px-6 rounded-lg transition-colors duration-300 shadow-md"
+          >
             <h2 className="text-xl font-semibold">Equipment Reservation</h2>
-            <p className="mt-2 text-gray-600">Coming soon</p>
-          </div>
+            <p className="mt-2 text-blue-100">Reserve equipment for your learning activities</p>
+          </Link>
         </div>
       </div>
     </div>
