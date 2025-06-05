@@ -12,7 +12,7 @@ const Equipment_Catalogue = ({ onSelectEquipment, onReserve }) => {
   const [filters, setFilters] = useState({
     typeId: '',
     subtypeId: '',
-    itemsPerPage: 8,
+    itemsPerPage: 4,
     currentPage: 1
   });
 
