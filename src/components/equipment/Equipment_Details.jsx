@@ -60,7 +60,11 @@ const Equipment_Details = ({ productName, onBack, onReserve }) => {
   const isCurrentAvailable = variantAvailability[currentVariant?.variant] || false;
 
   return (
+<<<<<<< HEAD
     <div className="max-w-6xl mx-auto pt-2">
+=======
+    <div className="max-w-6xl pt-2">
+>>>>>>> 1adc8cc3a332a1af960cb61ad278c8b85a8fb5f3
       <button 
         onClick={() => {
           // Refresh catalogue on back
@@ -143,4 +147,8 @@ const Equipment_Details = ({ productName, onBack, onReserve }) => {
   );
 };
 
+<<<<<<< HEAD
 export default Equipment_Details;
+=======
+export default Equipment_Details;
+>>>>>>> 1adc8cc3a332a1af960cb61ad278c8b85a8fb5f3

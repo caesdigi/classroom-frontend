@@ -194,4 +194,8 @@ const Equipment_Catalogue = ({ onSelectEquipment, onReserve }) => {
   );
 };
 
+<<<<<<< HEAD
 export default Equipment_Catalogue;
+=======
+export default Equipment_Catalogue;
+>>>>>>> 1adc8cc3a332a1af960cb61ad278c8b85a8fb5f3

@@ -306,4 +306,8 @@ const Equipment_MyReservations = () => {
   );
 };
 
+<<<<<<< HEAD
 export default Equipment_MyReservations;
+=======
+export default Equipment_MyReservations;
+>>>>>>> 1adc8cc3a332a1af960cb61ad278c8b85a8fb5f3
