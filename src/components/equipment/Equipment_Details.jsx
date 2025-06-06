@@ -60,7 +60,7 @@ const Equipment_Details = ({ productName, onBack, onReserve }) => {
   const isCurrentAvailable = variantAvailability[currentVariant?.variant] || false;
 
   return (
-    <div className="max-w-6xl pt-2">
+    <div className="max-w-6xl mx-auto pt-2">
       <button 
         onClick={() => {
           // Refresh catalogue on back

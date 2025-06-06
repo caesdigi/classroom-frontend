@@ -17,21 +17,20 @@ const Equipment_Reserve = ({ equipment, variant, onBack, onSuccess }) => {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [reservationStatus, setReservationStatus] = useState(null);
-  const [dateOptions, setDateOptions] = useState([]);
 
-  // Generate date options (today + next 14 days)
-  useEffect(() => {
+  // Generate date options dynamically on each render
+  const dateOptions = (() => {
     const options = ['Please select the intended checkout date'];
     const today = new Date();
     
     for (let i = 0; i < 15; i++) {
-      const date = new Date();
+      const date = new Date(today);
       date.setDate(today.getDate() + i);
       options.push(date.toISOString().split('T')[0]);
     }
     
-    setDateOptions(options);
-  }, []);
+    return options;
+  })();
 
   // Validation functions
   const validateEmail = (email) => {
@@ -119,7 +118,7 @@ const Equipment_Reserve = ({ equipment, variant, onBack, onSuccess }) => {
 
   if (!equipment || !variant) {
     return (
-      <div className="max-w-4xl pt-2">
+      <div className="max-w-6xl mx-auto pt-2">
         <p>No equipment selected. Please go back to the catalogue.</p>
         <button 
           onClick={onBack}
@@ -132,7 +131,7 @@ const Equipment_Reserve = ({ equipment, variant, onBack, onSuccess }) => {
   }
 
   return (
-    <div className="max-w-6xl pt-2">
+    <div className="max-w-6xl mx-auto pt-2">
       <button 
         onClick={onBack}
         className="flex items-center text-blue-600 mb-6"
