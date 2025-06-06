@@ -115,8 +115,4 @@ const Equipment_Wrapper = () => {
   );
 };
 
-<<<<<<< HEAD
 export default Equipment_Wrapper;
-=======
-export default Equipment_Wrapper;
->>>>>>> 1adc8cc3a332a1af960cb61ad278c8b85a8fb5f3
