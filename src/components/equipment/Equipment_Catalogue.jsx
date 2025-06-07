@@ -68,7 +68,7 @@ const Equipment_Catalogue = ({ onSelectEquipment, onReserve }) => {
 
   const handleTypeChange = async (e) => {
     const typeId = e.target.value;
-    setFilters({ ...filters, typeId, subtypeId: '' });
+    setFilters({ ...filters, typeId, subtypeId: '', currentPage: 1 });
     
     if (typeId) {
       // Filter subtypes for selected type
@@ -131,7 +131,7 @@ const Equipment_Catalogue = ({ onSelectEquipment, onReserve }) => {
               <select
                 className="rounded-md border-gray-300 shadow-sm min-w-[150px]"
                 value={filters.subtypeId}
-                onChange={e => setFilters({...filters, subtypeId: e.target.value})}
+                onChange={e => setFilters({...filters, subtypeId: e.target.value, currentPage: 1})}
               >
                 <option value="">All Subtypes</option>
                 {subtypes.map(subtype => (
