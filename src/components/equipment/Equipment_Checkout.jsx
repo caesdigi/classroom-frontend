@@ -164,7 +164,9 @@ const Equipment_Checkout = () => {
         </div>
 
       <div className="flex justify-between items-center mb-4 text-sm text-gray-500">
-        <span>{filteredCheckouts.length} pieces of equipment pending checkout</span>
+        <span>
+          {filteredCheckouts.filter(item => item.checkoutStatus !== 'success').length} {filteredCheckouts.filter(item => item.checkoutStatus !== 'success').length === 1 ? 'piece' : 'pieces'} of equipment pending checkout
+        </span>
         <div className="flex items-center">
           <span>
             Record fetched at {lastFetchTime ? lastFetchTime.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', second: '2-digit' }) : '--:--'} {lastFetchTime ? lastFetchTime.toLocaleDateString('en-US', { day: 'numeric', month: 'short', year: 'numeric' }) : ''}
