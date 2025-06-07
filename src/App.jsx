@@ -5,6 +5,7 @@ import CalendarView from './components/CalendarView';
 import CalendarView_Embed from './components/CalendarView_Embed';
 import Equipment_Wrapper from './components/equipment/Equipment_Wrapper';
 import Equipment_Wrapper_Embed from './components/equipment/Equipment_Wrapper_Embed';
+import Equipment_Wrapper_Teacher_Embed from './components/equipment/Equipment_Wrapper_Teacher_Embed';
 
 function App() {
   return (
@@ -15,6 +16,7 @@ function App() {
         <Route path="/classroom_embed" element={<CalendarView_Embed />} />
         <Route path="/equipment" element={<Equipment_Wrapper />} />
         <Route path="/equipment_embed" element={<Equipment_Wrapper_Embed />} />
+        <Route path="/equipment_teacher_embed" element={<Equipment_Wrapper_Teacher_Embed />} />
         <Route path="*" element={<LandingPage />} />
       </Routes>
     </Router>

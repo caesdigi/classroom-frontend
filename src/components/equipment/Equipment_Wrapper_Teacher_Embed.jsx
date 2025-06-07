@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import Equipment_Catalogue from './Equipment_Catalogue';
 import Equipment_Reserve from './Equipment_Reserve';
 import Equipment_MyReservations from './Equipment_MyReservations';
+import Equipment_Checkout from './Equipment_Checkout';
 
 const Equipment_Wrapper = () => {
   const navigate = useNavigate();
@@ -60,6 +61,16 @@ const Equipment_Wrapper = () => {
         >
           My Reservations
         </button>
+        <button
+          className={`py-4 px-6 font-medium text-sm ${
+            activeTab === 'checkout'
+              ? 'text-blue-600 border-b-2 border-blue-600'
+              : 'text-gray-500 hover:text-gray-700'
+          }`}
+          onClick={() => handleTabChange('checkout')}
+        >
+          Checkout
+        </button>
       </div>
 
       {/* Tab Content */}
@@ -88,8 +99,10 @@ const Equipment_Wrapper = () => {
               setActiveTab('myreservations');
             }}
           />
-        ) : (
+        ) : activeTab === 'myreservations' ? (
           <Equipment_MyReservations />
+        ) : (
+          <Equipment_Checkout />
         )}
       </div>
     </div>

@@ -674,7 +674,7 @@ const CalendarView = () => {
               }}
               placeholderText={formData.room_id ? "Select available date" : "Select a room first"}
               customInput={<CustomInput />}
-              dateFormat="yyyy-MM-dd"
+              dateFormat="dd MMMM yyyy"
               dayClassName={dayClassName}
               required
             />
