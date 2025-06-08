@@ -117,14 +117,15 @@ const Equipment_MyReservations = () => {
             </th>
             <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider min-w-[150px]">
               {activeTab === 'pending' ? 'Reservation Date' : 
-               activeTab === 'checkedout' ? 'Checkout Date' : 'Reservation Date'}
+               activeTab === 'checkedout' ? 'Reservation Date' : 'Reservation Date'}
             </th>
             <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider min-w-[150px]">
               {activeTab === 'pending' ? 'Intended Checkout' : 
-               activeTab === 'checkedout' ? 'Return Date' : 'Checkout Date'}
+               activeTab === 'checkedout' ? 'Checkout Date' : 'Checkout Date'}
             </th>
             <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider min-w-[200px]">
-              {activeTab === 'pending' ? 'Remarks' : 'Checkin Date'}
+              {activeTab === 'pending' ? 'Remarks' : 
+               activeTab === 'checkedout' ? 'Return Date' : 'Check-in Date'}
             </th>
           </tr>
         </thead>
@@ -149,15 +150,15 @@ const Equipment_MyReservations = () => {
                 )}
               </td>
               <td className="px-6 py-4 whitespace-nowrap">
-                {moment(res.reserve_date).format('YYYY-MM-DD HH:mm')}
+                {moment(res.reserve_date).format('HH:mm DD MMM YYYY')}
               </td>
               <td className="px-6 py-4 whitespace-nowrap">
                 {activeTab === 'pending' ? (
-                  moment(res.checkout_date).format('YYYY-MM-DD')
+                  moment(res.checkout_date).format('DD MMM YYYY')
                 ) : activeTab === 'checkedout' ? (
-                  moment(res.return_date).format('YYYY-MM-DD')
+                  moment(res.checkout_date).format('HH:mm DD MMM YYYY')
                 ) : (
-                  moment(res.checkout_date).format('YYYY-MM-DD HH:mm')
+                  moment(res.checkout_date).format('HH:mm DD MMM YYYY')
                 )}
               </td>
               <td className="px-6 py-4 max-w-[200px]">
@@ -166,9 +167,9 @@ const Equipment_MyReservations = () => {
                     {res.remarks || 'N/A'}
                   </div>
                 ) : activeTab === 'checkedout' ? (
-                  'Not Returned'
+                  moment(res.return_date).format('DD MMM YYYY')
                 ) : (
-                  moment(res.checkin_date).format('YYYY-MM-DD HH:mm')
+                  moment(res.checkin_date).format('HH:mm DD MMM YYYY')
                 )}
               </td>
             </tr>

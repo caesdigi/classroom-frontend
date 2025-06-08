@@ -2,6 +2,14 @@ import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import ReactModal from 'react-modal';
 
+function formatDateDisplay(dateString) {
+  const date = new Date(dateString);
+  const day = String(date.getDate()).padStart(2, '0');
+  const month = date.toLocaleString('en-US', { month: 'short' }); // e.g., Jun
+  const year = date.getFullYear();
+  return `${day} ${month} ${year}`;
+}
+
 const Equipment_Reserve = ({ equipment, variant, onBack, onSuccess }) => {
   // Form state
   const [formData, setFormData] = useState({
@@ -20,15 +28,13 @@ const Equipment_Reserve = ({ equipment, variant, onBack, onSuccess }) => {
 
   // Generate date options dynamically on each render
   const dateOptions = (() => {
-    const options = ['Please select the intended checkout date'];
+    const options = [];
     const today = new Date();
-    
     for (let i = 0; i < 15; i++) {
       const date = new Date(today);
       date.setDate(today.getDate() + i);
       options.push(date.toISOString().split('T')[0]);
     }
-    
     return options;
   })();
 
@@ -63,8 +69,6 @@ const Equipment_Reserve = ({ equipment, variant, onBack, onSuccess }) => {
     }
     if (!formData.checkoutDate) {
       newErrors.checkoutDate = 'Checkout date is required';
-    } else if (formData.checkoutDate === dateOptions[0]) {
-      newErrors.checkoutDate = 'Please select a valid date';
     }
     
     setErrors(newErrors);
@@ -234,9 +238,10 @@ const Equipment_Reserve = ({ equipment, variant, onBack, onSuccess }) => {
                   value={formData.checkoutDate}
                   onChange={(e) => setFormData({...formData, checkoutDate: e.target.value})}
                 >
+                  <option value="">Please select the intended checkout date</option>
                   {dateOptions.map((date, index) => (
-                    <option key={index} value={date}>
-                      {index === 0 ? date : index === 1 ? `${date} (Today)` : date}
+                    <option key={date} value={date}>
+                      {formatDateDisplay(date)}{index === 0 ? ' (Today)' : ''}
                     </option>
                   ))}
                 </select>
