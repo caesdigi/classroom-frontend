@@ -9,7 +9,8 @@ const Equipment_MyReservations = () => {
   const [reservations, setReservations] = useState({
     pending: [],
     checkedout: [],
-    checkedin: []
+    checkedin: [],
+    cancelled: [] // Add cancelled state
   });
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState('');
@@ -99,86 +100,262 @@ const Equipment_MyReservations = () => {
     fetchReservations();
   };
 
-  const renderTable = (reservations) => {
-  if (reservations.length === 0) {
-    return <p className="text-center py-4">No reservations found</p>;
-  }
+  // Handle reservation cancellation
+  const handleCancelReservation = async (transactionId) => {
+    try {
+      await axios.patch(`${import.meta.env.VITE_API_URL}/equipment/cancel-reservation/${transactionId}`);
+      
+      // Update UI without refreshing
+      setReservations(prev => {
+        // Find and update the reservation in pending
+        const updatedPending = prev.pending.map(res => {
+          if (res.transaction_id === transactionId) {
+            return { ...res, checkout_date: null, isCancelled: true };
+          }
+          return res;
+        });
+        
+        // Find the cancelled reservation to add to cancelled tab
+        const cancelledReservation = prev.pending.find(res => 
+          res.transaction_id === transactionId
+        );
+        
+        return {
+          ...prev,
+          pending: updatedPending,
+          cancelled: cancelledReservation ? 
+            [{ ...cancelledReservation, checkout_date: null }, ...prev.cancelled] : 
+            prev.cancelled
+        };
+      });
+    } catch (err) {
+      console.error('Cancellation failed:', err);
+      setError('Failed to cancel reservation. Please try again.');
+    }
+  };
 
-  return (
-    <div className="overflow-x-auto">
-      <table className="min-w-full divide-y divide-gray-200">
-        <thead className="bg-gray-50">
-          <tr>
-            <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider min-w-[120px]">
-              Equipment
-            </th>
-            <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider min-w-[200px]">
-              Name & Variant
-            </th>
-            <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider min-w-[150px]">
-              {activeTab === 'pending' ? 'Reservation Date' : 
-               activeTab === 'checkedout' ? 'Reservation Date' : 'Reservation Date'}
-            </th>
-            <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider min-w-[150px]">
-              {activeTab === 'pending' ? 'Intended Checkout' : 
-               activeTab === 'checkedout' ? 'Checkout Date' : 'Checkout Date'}
-            </th>
-            <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider min-w-[200px]">
-              {activeTab === 'pending' ? 'Remarks' : 
-               activeTab === 'checkedout' ? 'Return Date' : 'Check-in Date'}
-            </th>
-          </tr>
-        </thead>
-        <tbody className="bg-white divide-y divide-gray-200">
-          {reservations.map((res) => (
-            <tr key={res.transaction_id}>
-              <td className="px-6 py-4 whitespace-nowrap">
-                <img 
-                  src={res.image_url} 
-                  alt={res.product_name} 
-                  className="h-16 w-16 object-contain"
-                />
-              </td>
-              <td className="px-6 py-4 max-w-[200px]">
-                <div className="font-medium text-gray-900 whitespace-normal">
-                  {res.product_name}
-                </div>
-                {res.variant && (
-                  <div className="text-gray-500 whitespace-normal">
-                    {res.variant}
-                  </div>
-                )}
-              </td>
-              <td className="px-6 py-4 whitespace-nowrap">
-                {moment(res.reserve_date).format('HH:mm DD MMM YYYY')}
-              </td>
-              <td className="px-6 py-4 whitespace-nowrap">
-                {activeTab === 'pending' ? (
-                  moment(res.checkout_date).format('DD MMM YYYY')
-                ) : activeTab === 'checkedout' ? (
-                  moment(res.checkout_date).format('HH:mm DD MMM YYYY')
-                ) : (
-                  moment(res.checkout_date).format('HH:mm DD MMM YYYY')
-                )}
-              </td>
-              <td className="px-6 py-4 max-w-[200px]">
-                {activeTab === 'pending' ? (
-                  <div className="whitespace-normal">
-                    {res.remarks || 'N/A'}
-                  </div>
-                ) : activeTab === 'checkedout' ? (
-                  moment(res.return_date).format('DD MMM YYYY')
-                ) : (
-                  moment(res.checkin_date).format('HH:mm DD MMM YYYY')
-                )}
-              </td>
+  // Render pending table with cancellation button
+  const renderPendingTable = () => {
+    if (reservations.pending.length === 0) {
+      return <p className="text-center py-4">No pending reservations</p>;
+    }
+
+    return (
+      <div className="overflow-x-auto">
+        <table className="min-w-full divide-y divide-gray-200">
+          <thead className="bg-gray-50">
+            <tr>
+              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider min-w-[120px]">
+                Equipment
+              </th>
+              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider min-w-[200px]">
+                Name & Variant
+              </th>
+              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider min-w-[150px]">
+                Reservation Date
+              </th>
+              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider min-w-[150px]">
+                Intended Checkout
+              </th>
+              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider min-w-[200px]">
+                Remarks
+              </th>
+              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider min-w-[150px]">
+                Action
+              </th>
             </tr>
-          ))}
-        </tbody>
-      </table>
-    </div>
-  );
-};
+          </thead>
+          <tbody className="bg-white divide-y divide-gray-200">
+            {reservations.pending.map((res) => (
+              <tr key={res.transaction_id}>
+                <td className="px-6 py-4 whitespace-nowrap">
+                  <img 
+                    src={res.image_url} 
+                    alt={res.product_name} 
+                    className="h-16 w-16 object-contain"
+                  />
+                </td>
+                <td className="px-6 py-4 max-w-[200px]">
+                  <div className="font-medium text-gray-900 whitespace-normal">
+                    {res.product_name}
+                  </div>
+                  {res.variant && (
+                    <div className="text-gray-500 whitespace-normal">
+                      {res.variant}
+                    </div>
+                  )}
+                </td>
+                <td className="px-6 py-4 whitespace-nowrap">
+                  {moment(res.reserve_date).format('HH:mm DD MMM YYYY')}
+                </td>
+                <td className="px-6 py-4 whitespace-nowrap">
+                  {res.checkout_date && !res.isCancelled ? (
+                    moment(res.checkout_date).format('DD MMM YYYY')
+                  ) : 'N/A'}
+                </td>
+                <td className="px-6 py-4 max-w-[200px] whitespace-normal">
+                  {res.remarks || 'N/A'}
+                </td>
+                <td className="px-6 py-4">
+                  {res.checkout_date && !res.isCancelled ? (
+                    <button
+                      onClick={() => handleCancelReservation(res.transaction_id)}
+                      className="px-3 py-1 bg-red-600 text-white rounded hover:bg-red-700"
+                    >
+                      Cancel Reservation
+                    </button>
+                  ) : (
+                    <span className="text-gray-600">Reservation cancelled</span>
+                  )}
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
+    );
+  };
+
+  // Render the cancelled reservations table
+  const renderCancelledTable = () => {
+    if (reservations.cancelled.length === 0) {
+      return <p className="text-center py-4">No cancelled reservations</p>;
+    }
+
+    return (
+      <div className="overflow-x-auto">
+        <table className="min-w-full divide-y divide-gray-200">
+          <thead className="bg-gray-50">
+            <tr>
+              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider min-w-[120px]">
+                Equipment
+              </th>
+              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider min-w-[200px]">
+                Name & Variant
+              </th>
+              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider min-w-[150px]">
+                Reservation Date
+              </th>
+              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider min-w-[200px]">
+                Remarks
+              </th>
+            </tr>
+          </thead>
+          <tbody className="bg-white divide-y divide-gray-200">
+            {reservations.cancelled.map((res) => (
+              <tr key={res.transaction_id}>
+                <td className="px-6 py-4 whitespace-nowrap">
+                  <img 
+                    src={res.image_url} 
+                    alt={res.product_name} 
+                    className="h-16 w-16 object-contain"
+                  />
+                </td>
+                <td className="px-6 py-4 max-w-[200px]">
+                  <div className="font-medium text-gray-900 whitespace-normal">
+                    {res.product_name}
+                  </div>
+                  {res.variant && (
+                    <div className="text-gray-500 whitespace-normal">
+                      {res.variant}
+                    </div>
+                  )}
+                </td>
+                <td className="px-6 py-4 whitespace-nowrap">
+                  {moment(res.reserve_date).format('HH:mm DD MMM YYYY')}
+                </td>
+                <td className="px-6 py-4 max-w-[200px] whitespace-normal">
+                  {res.remarks || 'N/A'}
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
+    );
+  };
+
+  // Render table for checked out and checked in reservations
+  const renderTable = (reservations, tabType) => {
+    if (reservations.length === 0) {
+      return <p className="text-center py-4">No reservations found</p>;
+    }
+  
+    return (
+      <div className="overflow-x-auto">
+        <table className="min-w-full divide-y divide-gray-200">
+          <thead className="bg-gray-50">
+            <tr>
+              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider min-w-[120px]">
+                Equipment
+              </th>
+              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider min-w-[200px]">
+                Name & Variant
+              </th>
+              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider min-w-[150px]">
+                {tabType === 'pending' ? 'Reservation Date' : 
+                 tabType === 'checkedout' ? 'Reservation Date' : 'Reservation Date'}
+              </th>
+              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider min-w-[150px]">
+                {tabType === 'pending' ? 'Intended Checkout' : 
+                 tabType === 'checkedout' ? 'Checkout Date' : 'Checkout Date'}
+              </th>
+              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider min-w-[200px]">
+                {tabType === 'pending' ? 'Remarks' : 
+                 tabType === 'checkedout' ? 'Return Date' : 'Check-in Date'}
+              </th>
+            </tr>
+          </thead>
+          <tbody className="bg-white divide-y divide-gray-200">
+            {reservations.map((res) => (
+              <tr key={res.transaction_id}>
+                <td className="px-6 py-4 whitespace-nowrap">
+                  <img 
+                    src={res.image_url} 
+                    alt={res.product_name} 
+                    className="h-16 w-16 object-contain"
+                  />
+                </td>
+                <td className="px-6 py-4 max-w-[200px]">
+                  <div className="font-medium text-gray-900 whitespace-normal">
+                    {res.product_name}
+                  </div>
+                  {res.variant && (
+                    <div className="text-gray-500 whitespace-normal">
+                      {res.variant}
+                    </div>
+                  )}
+                </td>
+                <td className="px-6 py-4 whitespace-nowrap">
+                  {moment(res.reserve_date).format('HH:mm DD MMM YYYY')}
+                </td>
+                <td className="px-6 py-4 whitespace-nowrap">
+                  {tabType === 'pending' ? (
+                    moment(res.checkout_date).format('DD MMM YYYY')
+                  ) : tabType === 'checkedout' ? (
+                    moment(res.checkout_date).format('HH:mm DD MMM YYYY')
+                  ) : (
+                    moment(res.checkout_date).format('HH:mm DD MMM YYYY')
+                  )}
+                </td>
+                <td className="px-6 py-4 max-w-[200px]">
+                  {tabType === 'pending' ? (
+                    <div className="whitespace-normal">
+                      {res.remarks || 'N/A'}
+                    </div>
+                  ) : tabType === 'checkedout' ? (
+                    moment(res.return_date).format('DD MMM YYYY')
+                  ) : (
+                    moment(res.checkin_date).format('HH:mm DD MMM YYYY')
+                  )}
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
+    );
+  };
 
   return (
     <div className="max-w-full mx-auto">
@@ -190,7 +367,6 @@ const Equipment_MyReservations = () => {
           <h2 className="text-2xl font-bold mb-2 py-2">
             {getGreeting()}, {studentName || 'User'}!
           </h2>
-          {/* <p className="text-gray-600 mb-6">UID: *****{uid}</p> */}
           
           {/* Tabs */}
           <div className="flex border-b border-gray-200 mb-6">
@@ -224,6 +400,16 @@ const Equipment_MyReservations = () => {
             >
               Checked In
             </button>
+            <button
+              className={`py-3 px-6 font-medium ${
+                activeTab === 'cancelled'
+                  ? 'text-blue-600 border-b-2 border-blue-600'
+                  : 'text-gray-500 hover:text-gray-700'
+              }`}
+              onClick={() => setActiveTab('cancelled')}
+            >
+              Cancelled Reservations
+            </button>
           </div>
           
           {/* Tab Content */}
@@ -231,9 +417,10 @@ const Equipment_MyReservations = () => {
             <div className="text-center py-8">Loading reservations...</div>
           ) : (
             <div>
-              {activeTab === 'pending' && renderTable(reservations.pending)}
-              {activeTab === 'checkedout' && renderTable(reservations.checkedout)}
-              {activeTab === 'checkedin' && renderTable(reservations.checkedin)}
+              {activeTab === 'pending' && renderPendingTable()}
+              {activeTab === 'checkedout' && renderTable(reservations.checkedout, 'checkedout')}
+              {activeTab === 'checkedin' && renderTable(reservations.checkedin, 'checkedin')}
+              {activeTab === 'cancelled' && renderCancelledTable()}
             </div>
           )}
           
@@ -242,7 +429,7 @@ const Equipment_MyReservations = () => {
               onClick={() => {
                 setUid('');
                 setStudentName('');
-                setReservations({ pending: [], checkedout: [], checkedin: [] });
+                setReservations({ pending: [], checkedout: [], checkedin: [], cancelled: [] });
                 setError('');
                 setIsSubmitted(false);
               }}
