@@ -11,7 +11,7 @@ const Equipment_Checkout = () => {
   const [lastFetchTime, setLastFetchTime] = useState(null);
   const [isLoading, setIsLoading] = useState(true);
   const [returnDates, setReturnDates] = useState({});
-  const [useDefaultDate] = useState(false); // Change to false to disable default dates
+  const [useDefaultDate] = useState(true); // Change to false to disable default dates
 
   // Fetch pending checkout data
   const fetchPendingCheckouts = async () => {
@@ -22,7 +22,7 @@ const Equipment_Checkout = () => {
         // Initialize return dates conditionally
         const initialReturnDates = {};
         if (useDefaultDate) {
-        const defaultReturnDate = new Date('2025-07-16'); //Change this to update the default return date
+        const defaultReturnDate = new Date('2025-06-25'); //Change this to update the default return date
         response.data.forEach(item => {
             initialReturnDates[item.transaction_id] = defaultReturnDate;
         });
