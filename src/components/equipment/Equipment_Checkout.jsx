@@ -22,7 +22,7 @@ const Equipment_Checkout = () => {
         // Initialize return dates conditionally
         const initialReturnDates = {};
         if (useDefaultDate) {
-        const defaultReturnDate = new Date('2025-07-02'); //Change this to update the default return date
+        const defaultReturnDate = new Date('2025-07-16'); //Change this to update the default return date
         response.data.forEach(item => {
             initialReturnDates[item.transaction_id] = defaultReturnDate;
         });
