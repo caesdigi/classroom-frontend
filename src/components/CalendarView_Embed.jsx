@@ -754,10 +754,10 @@ const CalendarView = () => {
           onNavigate={setCurrentDate}
           onView={setView}
           onSelectEvent={handleEventClick}
-          min={moment().set({ hour: 13, minute: 30 }).toDate()}
-          max={moment().set({ hour: 16, minute: 50 }).toDate()}
-          step={50}
-          timeslots={1}
+          min={moment().set({ hour: 9, minute: 0 }).toDate()}
+          max={moment().set({ hour: 17, minute: 0 }).toDate()}
+          step={30}
+          timeslots={2}
           formats={{
             timeGutterFormat: 'H:mm',
             eventTimeRangeFormat: ({ start, end }) => 
