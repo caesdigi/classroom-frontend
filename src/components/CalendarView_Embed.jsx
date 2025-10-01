@@ -377,7 +377,7 @@ const CalendarView = () => {
         params: { 
           start_date: rangeStart.format('YYYY-MM-DD'),
           end_date: rangeEnd.format('YYYY-MM-DD'),
-          show_cancelled: true
+          show_cancelled: false
         }
       });
       
