@@ -754,7 +754,7 @@ const CalendarView = () => {
           onNavigate={setCurrentDate}
           onView={setView}
           onSelectEvent={handleEventClick}
-          min={moment().set({ hour: 9, minute: 0 }).toDate()}
+          min={moment().set({ hour: 13, minute: 0 }).toDate()}
           max={moment().set({ hour: 17, minute: 0 }).toDate()}
           step={30}
           timeslots={2}
